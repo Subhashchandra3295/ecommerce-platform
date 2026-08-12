@@ -5,7 +5,7 @@ Checkout flow — built to demonstrate production-style Laravel: queue-driven
 order processing, a server-rendered admin panel, and a typed Next.js
 storefront talking to a Laravel API.
 
-**Live demo:** _deploying — see [DEPLOYMENT.md](./DEPLOYMENT.md) for the Railway + Vercel setup._
+**Live demo:** [ecommerce-platform-snowy-two.vercel.app](https://ecommerce-platform-snowy-two.vercel.app) (frontend on Vercel, API on Render — see [DEPLOYMENT.md](./DEPLOYMENT.md); Stripe test card `4242 4242 4242 4242`, any future expiry/CVC)
 
 ## Problem
 
