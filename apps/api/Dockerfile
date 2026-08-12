@@ -7,8 +7,8 @@ COPY vite.config.js ./
 RUN npm run build
 
 FROM php:8.3-cli-alpine AS app
-RUN apk add --no-cache icu-dev oniguruma-dev libzip-dev zip unzip git \
-    && docker-php-ext-install pdo_mysql mbstring intl bcmath
+RUN apk add --no-cache icu-dev oniguruma-dev libzip-dev postgresql-dev zip unzip git \
+    && docker-php-ext-install pdo_mysql pdo_pgsql mbstring intl bcmath
 
 WORKDIR /app
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
