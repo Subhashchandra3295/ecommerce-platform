@@ -32,6 +32,15 @@ jobs:
 
       - run: composer install --prefer-dist --no-progress
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/api/package-lock.json
+
+      - run: npm ci
+      - run: npm run build
+
       - run: cp .env.example .env
       - run: php artisan key:generate
 
