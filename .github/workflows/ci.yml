@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  api:
+    name: API (Pint, PHPUnit)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/api
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, pdo_sqlite, intl, bcmath
+          coverage: none
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: apps/api/vendor
+          key: composer-${{ hashFiles('apps/api/composer.lock') }}
+
+      - run: composer install --prefer-dist --no-progress
+
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+
+      - run: ./vendor/bin/pint --test
+
+      - run: php artisan test
+
+  web:
+    name: Web (lint, build)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
